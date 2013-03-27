@@ -1,14 +1,26 @@
-{   "name": "scriptme"
-  , "description": "Scriptme is a smart-template engine written inspired by script-host platform like php+html but using javascript code, you cant make text/plain, source code or anything you want"
-  , "version": "0.0.0"
-  , "author": "Delmo Carrozzo <dcardev@gmail.com>"
-  , "keywords": ["templates"]
-  , "repository": {
+{
+  "name": "scriptme",
+  "description": "Scriptme is a smart-template engine written inspired by script-host platform like php+html but using javascript code, you cant make text/plain, source code or anything you want",
+  "version": "0.0.0",
+  "author": "Delmo Carrozzo <dcardev@gmail.com>",
+  "keywords": [
+    "templates"
+  ],
+  "repository": {
     "type": "git",
     "url": "https://github.com/delmosaurio/scriptme.git"
+  },
+  "main": "./index.js",
+  "engines": {
+    "node": "*"
+  },
+  "bin": {
+    "scriptme": "./bin/scriptme"
+  },
+  "scripts": {},
+  "dependencies": {
+    "xregexp": "~2.0.0",
+    "mkdirp": "~0.3.5",
+    "js-beautify": "~0.4.2"
   }
-  , "main": "./index.js"
-  , "engines": { "node": "*" }
-  , "bin": { "scriptme": "./bin/scriptme" }
-  , "scripts" : {  }
 }

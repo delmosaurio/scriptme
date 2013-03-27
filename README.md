@@ -4,7 +4,7 @@
 
  *This project still remains as an idea. I'm working on it.*
 
-### install
+### npm install
 
 ```
 npm install scriptme

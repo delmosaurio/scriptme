@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+
+/*!
+ * Scriptme
+ * Copyright(c) 2012-2013 Delmo Carrozzo <dcardev@gmail.com>
+ * MIT Licensed
+ */
+
+var fs = require('fs')
+  , scriptme = require('../lib/scriptme'),
+
+// args
+var args = process.argv.slice(2);
+
+// usage docs.
+var usage = [
+    ''
+  , '  Usage: scriptme'
+  , ''
+  , '  Commands:'
+  , ''
+  , '  Options:'
+  , ''
+  , '    -c, --version             Display a version of Scriptme'
+  , '    -h, --help                Display this text'
+  , '    -i, --input   <filename>  Input template file'
+  , '    -o, --output  <filename>  Output rendered file'
+  , '    -d, --data    <filename>  Json data file'
+  , ''
+].join('\n');
+
+
+// procces args
+var arg;
+while (args.length) {
+  arg = args.shift();
+  switch (arg) {
+    case '-h':
+    case '--help':
+      console.error(usage);
+      process.exit(1);
+    case '-v':
+    case '--version':
+      console.log(scriptme.version);
+      process.exit(0);
+      break;
+    default:
+      console.log('Not supported yet!');
+      process.exit(1);
+  }
+}
