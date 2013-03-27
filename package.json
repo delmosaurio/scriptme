@@ -1,0 +1,14 @@
+{   "name": "scriptme"
+  , "description": "Scriptme is a template engine tools to make text/plain, source code or anything you want based on an script-host like php+html"
+  , "version": "0.0.0"
+  , "author": "Delmo Carrozzo <delmosaurio@gmail.com>"
+  , "keywords": ["templates"]
+  , "repository": {
+    "type": "git",
+    "url": "https://github.com/delmosaurio/scriptme.git"
+  }
+  , "main": "./index.js"
+  , "engines": { "node": "*" }
+  , "bin": { "scriptme": "./bin/scriptme" }
+  , "scripts" : {  }
+}
