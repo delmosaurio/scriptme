@@ -48,7 +48,7 @@ advanced
 (function( $ ) {
   $.fn.![pluginname] = function() {
 
-    <!js for(var i=0; i < funcs.legth; i++) {!>
+    <!js for(var i=0; i < funcs.length; i++) {!>
 	$.fn.!!funcs[i] = function() {
     	return $('.!!funcs[i]');
 	};

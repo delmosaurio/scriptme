@@ -9,9 +9,9 @@
 (function( $ ) {
   $.fn.![pluginname] = function() {
 
-    <!js for(var func in funcs) {!>
-    $.fn.!!func = function() {
-        return $('.' + !!func);
+    <!js for(var i=0; i < funcs.length; i++) {!>
+    $.fn.!!funcs[i] = function() {
+        return $('.!!funcs[i]');
     };
     <!js } !>
 

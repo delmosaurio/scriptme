@@ -11,7 +11,7 @@ var
     // scriptme modules
     scriptme = require('../lib/scriptme');
 
-var context = { name: 'test' };
+var context = { description: 'my jQuery plugin description' };
 
 var template = fs.readFileSync('./test/cases/jquery.plugin.js', 'utf8');
 
