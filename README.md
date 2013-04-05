@@ -104,7 +104,7 @@ var data = {
 var template = fs.readFileSync('/path/from/template.js');
 var writer = fs.createWriteStream('./myplugin.js');
 
-scriptme.render(script, writer, context, function(error, response) {
+scriptme.render(script, writer, data, function(error, response) {
 	
 	if (error !== null) {
 		console.error(error);	
