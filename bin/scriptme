@@ -21,7 +21,7 @@ var usage = [
   , ''
   , '  Options:'
   , ''
-  , '    -c, --version             Display a version of Scriptme'
+  , '    -v, --version             Display a version of Scriptme'
   , '    -h, --help                Display this text'
   , '    -i, --input   <filename>  Input template file'
   , '    -o, --output  <filename>  Output rendered file'

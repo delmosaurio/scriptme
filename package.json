@@ -1,7 +1,7 @@
 {
   "name": "scriptme",
   "description": "Scriptme is a smart-template engine inspired by script-host platform like php+html but using javascript code, you cant make text/plain, source code or anything you want",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "Delmo Carrozzo <dcardev@gmail.com>",
   "keywords": [
     "templates"
