@@ -1,8 +1,6 @@
-# Scriptme
+# Scriptme - under development
  
- Scriptme is a smart-template engine written in [Node.js](http://nodejs.org/) inspired by script-host platform like php+html but using javascript code, you cant make text/plain, source code or anything you want
-
- *This project still remains as an idea. I'm working on it.*
+ Scriptme is a smart-template engine written in [Node.js](http://nodejs.org/) inspired by script-host platform like php+html but using nodejs code, you cant make text/plain, source code or anything you want from templates
 
 ### npm install
 
