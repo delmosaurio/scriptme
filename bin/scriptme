@@ -6,18 +6,22 @@
  * MIT Licensed
  */
 
+ /**
+  * Module dependencies.
+  */
 var fs = require('fs')
-  , scriptme = require('../lib/scriptme'),
+  , scriptme = require('../lib/scriptme');
 
 // args
 var args = process.argv.slice(2);
 
-// usage docs.
+// usage docs
 var usage = [
     ''
-  , '  Usage: scriptme'
+  , '  Usage: scriptme -i "path/from/template" -o "path/to/template" [options]'
   , ''
-  , '  Commands:'
+  , '    -i, --input   <filename>  Input template file'
+  , '    -o, --output  <filename>  Output rendered file'
   , ''
   , '  Options:'
   , ''
@@ -26,26 +30,174 @@ var usage = [
   , '    -i, --input   <filename>  Input template file'
   , '    -o, --output  <filename>  Output rendered file'
   , '    -d, --data    <filename>  Json data file'
+  , '    --force                   Force override output file'
   , ''
 ].join('\n');
 
+
+var input = ''
+  , output = ''
+  , data = ''
+  , force = false
+  , iSeted = false
+  , oSeted = false;
 
 // procces args
 var arg;
 while (args.length) {
   arg = args.shift();
   switch (arg) {
+    case '--debug':
+      process.env.SCRIPTME_DEBUG = true;
+    break;
     case '-h':
     case '--help':
-      console.error(usage);
-      process.exit(1);
+      abort(usage);
     case '-v':
     case '--version':
-      console.log(scriptme.version);
-      process.exit(0);
+      abort(scriptme.version);
       break;
+    case '--force':
+      force = true;
+      break;
+    case '-i':
+    case '--input':
+      (args.length) 
+        ? (input = args.shift())
+        : abort('--input requires an argument');
+      iSeted = true;
+    break;
+    case '-o':
+    case '--output':
+      (args.length) 
+        ? (output = args.shift())
+        : abort('--output requires an argument');
+      oSeted = true;
+    break;
+    case '-d':
+    case '--data':
+      (args.length) 
+        ? (data = args.shift())
+        : abort('--data requires an argument');
+    break;
     default:
-      console.log('Not supported yet!');
-      process.exit(1);
+      abort('Not supported yet!');
   }
+}
+
+// check
+if (!iSeted && !oSeted) {
+  abort('scriptme needs an input file and an output file to work!');
+}
+
+// just do it
+(function(input, output, data, force){
+
+  var context = {};
+
+  // exists the input file?
+  if ( !fs.existsSync(input) ){
+    abort('the input file doesn\'t exists');
+  }
+
+  // get the the json data file
+  if (data && data.length) {
+    if ( fs.existsSync(data) ){
+      context = JSON.parse( fs.readFileSync(data) );
+    } else {
+        console.warn('the data file doesn\'t exists');
+    }
+  }
+
+  var callback = function(err, response) {
+
+      if (err) { abort(err); }
+      console.log('the template was created at', output);
+      
+  };
+
+  fs.exists(output, function(exists){
+    if (!exists || force) {
+      render(input, output, context, callback);
+    } else {
+      confirm('output file is not empty, continue? ', function(ok){
+        if (ok) {
+          process.stdin.destroy();
+
+          render(input, output, context, callback);
+
+        } else {
+          abort('aborting');
+        }
+      });
+    }
+  });
+
+})(input, output, data, force);
+
+/**
+ * Render the template without checks
+ * 
+ * @param {String} input
+ * @param {String} output
+ * @param {Object} context
+ * @param {Function} fn
+  */
+function render(input, output, context, fn) {
+  
+  var template = fs.readFileSync(input, 'utf8');
+  var writer = fs.createWriteStream(output);
+
+  writer.on('error', function(err){
+    console.error(err);
+  });
+  
+  scriptme.render(template, writer, context, fn);
+
+}
+
+/**
+ * Prompt confirmation with the given `msg`.
+ *
+ * @param {String} msg
+ * @param {Function} fn
+ */
+
+function confirm(msg, fn) {
+  prompt(msg, function(val){
+    fn(/^ *y(es)?/i.test(val));
+  });
+}
+
+/**
+ * Prompt input with the given `msg` and callback `fn`.
+ *
+ * @param {String} msg
+ * @param {Function} fn
+ */
+
+function prompt(msg, fn) {
+  // prompt
+  if (' ' == msg[msg.length - 1]) {
+    process.stdout.write(msg);
+  } else {
+    console.log(msg);
+  }
+
+  // stdin
+  process.stdin.setEncoding('ascii');
+  process.stdin.once('data', function(data){
+    fn(data);
+  }).resume();
+}
+
+/**
+ * Exit with the given `str`.
+ *
+ * @param {String} str
+ */
+
+function abort(str) {
+  console.log.apply(null,arguments);
+  process.exit(1);
 }

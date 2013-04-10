@@ -10,9 +10,25 @@
 npm install scriptme
 ```
 
+### usage
+
+```
+Usage: scriptme -i "path/from/template" -o "path/to/template" [options]
+
+-i, --input   <filename>  Input template file
+-o, --output  <filename>  Output rendered file
+
+Options:
+
+    -v, --version             Display a version of Scriptme
+    -h, --help                Display this text
+    -d, --data    <filename>  Json data file
+    --force                   Force override output file
+```
+
 ### example
 
-create a template file `/path/from/template.js`
+create the template file `/path/from/template.js`
 
 basic
 
@@ -62,8 +78,8 @@ json `data.json`
 
 ```javascript
 {
-	pluginname: 'myPlugin',
-	description: 'my jQuery plugin description'
+    "pluginname": "myPlugin",
+    "description": "my jQuery plugin description"
 }
 ```
 

@@ -15,7 +15,6 @@ var context = { description: 'my jQuery plugin description' };
 
 var template = fs.readFileSync('./test/cases/jquery.plugin.js', 'utf8');
 
-mkdirp('./cache');
 mkdirp('./test/cases/output');
 
 var writer = fs.createWriteStream('./test/cases/output/myplugin.js');
