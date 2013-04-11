@@ -1,4 +1,4 @@
-# Scriptme - under development -[![Build Status](https://secure.travis-ci.org/delmosaurio/node-scriptme.png)](http://travis-ci.org/delmosaurio/scriptme)
+# Scriptme [![Build Status](https://secure.travis-ci.org/delmosaurio/scriptme.png)](http://travis-ci.org/delmosaurio/scriptme) - under development 
  
  Scriptme is a smart-template engine written in [Node.js](http://nodejs.org/) inspired by script-host platform like php+html but using nodejs code, you cant make text/plain, source code or anything you want from templates
 
