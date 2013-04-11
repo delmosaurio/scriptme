@@ -17,10 +17,16 @@
   "bin": {
     "scriptme": "./bin/scriptme"
   },
-  "scripts": {},
+  "scripts": {
+    "test": "make test"
+  },
   "dependencies": {
     "xregexp": "~2.0.0",
     "mkdirp": "~0.3.5",
     "js-beautify": "~0.4.2"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "~1.2.2"
   }
 }
