@@ -146,13 +146,14 @@ if (!iSeted && !oSeted) {
 function render(input, output, context, fn) {
   
   var template = fs.readFileSync(input, 'utf8');
-  var writer = fs.createWriteStream(output);
+  //var writer = fs.createWriteStream(output);
 
+  /*
   writer.on('error', function(err){
     console.error(err);
-  });
+  });*/
   
-  scriptme.render(template, writer, context, fn);
+  scriptme.render(template, context, fn);
 
 }
 

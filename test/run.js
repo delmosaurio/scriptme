@@ -7,7 +7,7 @@
     , join = require('path').join
     , mkdirp = require('mkdirp')
     , scriptme = require('../lib/scriptme')
-    , assert = require('assert');;
+    , assert = require('assert');
 
 describe('Rendering the template `jquery.plugin.js`', function() {
 
