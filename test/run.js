@@ -12,11 +12,11 @@
 describe('Rendering the template `jquery.plugin.js`', function() {
 
     before(function(done){
-        mkdirp('cases/output', function(err){
+        mkdirp('./test/cases/output', function(err){
             
             if (err) { throw err; }
 
-            var context = { description: 'my jQuery plugin description' };
+            var context = JSON.parse(fs.readFileSync('./test/cases/data.json', 'utf8'));
             var template = fs.readFileSync('./test/cases/jquery.plugin.js', 'utf8');
             var writer = fs.createWriteStream('./test/cases/output/myplugin.js');
 
