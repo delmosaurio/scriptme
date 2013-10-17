@@ -12,150 +12,60 @@
 var fs = require('fs')
   , scriptme = require('../lib/scriptme');
 
-// args
-var args = process.argv.slice(2);
 
-// usage docs
-var usage = [
-    ''
-  , '  Usage: scriptme -i "path/from/template" -o "path/to/template" [options]'
-  , ''
-  , '    -i, --input   <filename>  Input template file'
-  , '    -o, --output  <filename>  Output rendered file'
-  , ''
-  , '  Options:'
-  , ''
-  , '    -v, --version             Display a version of Scriptme'
-  , '    -h, --help                Display this text'
-  , '    -i, --input   <filename>  Input template file'
-  , '    -o, --output  <filename>  Output rendered file'
-  , '    -d, --data    <filename>  Json data file'
-  , '    --force                   Force override output file'
-  , ''
-].join('\n');
+var program = require('commander');
+
+program
+  .version(scriptme.version)
+  .usage('-i "path/from/template" -o "path/to/template" [options]')
+  .option('-i, --input <file>', 'input template file')
+  .option('-o, --output <file>', 'output rendered file')
+  .option('-d, --data <file>', 'json data file')
+  .option('-f, --force', 'Json data file')
+  .parse(process.argv);
 
 
-var input = ''
-  , output = ''
-  , data = ''
-  , force = false
-  , iSeted = false
-  , oSeted = false;
+if (program.input === undefined || program.output === undefined) {
+  abort('  scriptme needs an input file and an output file to work!');
+}
 
-// procces args
-var arg;
-while (args.length) {
-  arg = args.shift();
-  switch (arg) {
-    case '--debug':
-      process.env.SCRIPTME_DEBUG = true;
-    break;
-    case '-h':
-    case '--help':
-      abort(usage);
-    case '-v':
-    case '--version':
-      abort(scriptme.version);
-      break;
-    case '--force':
-      force = true;
-      break;
-    case '-i':
-    case '--input':
-      (args.length) 
-        ? (input = args.shift())
-        : abort('--input requires an argument');
-      iSeted = true;
-    break;
-    case '-o':
-    case '--output':
-      (args.length) 
-        ? (output = args.shift())
-        : abort('--output requires an argument');
-      oSeted = true;
-    break;
-    case '-d':
-    case '--data':
-      (args.length) 
-        ? (data = args.shift())
-        : abort('--data requires an argument');
-    break;
-    default:
-      abort('Not supported yet!');
+var context = {};
+
+// exists the input file?
+if ( !fs.existsSync(program.input) ){
+  abort('the input file doesn\'t exists');
+}
+
+// get the the json data file
+if (program.data !== undefined && program.data.length) {
+  if ( fs.existsSync(program.data) ){
+    context = JSON.parse( fs.readFileSync(program.data) );
+  } else {
+      console.warn('the data file doesn\'t exists');
   }
 }
 
-// check
-if (!iSeted && !oSeted) {
-  abort('scriptme needs an input file and an output file to work!');
-}
+var callback = function(err, response) {
 
-// just do it
-(function(input, output, data, force){
+    if (err) { abort(err); }
+    console.log('the template was created at', program.output);
+    
+};
 
-  var context = {};
+fs.exists(program.output, function(exists){
 
-  // exists the input file?
-  if ( !fs.existsSync(input) ){
-    abort('the input file doesn\'t exists');
+  if (!exists || program.force) {
+    render(program.input, program.output, context, callback);
+  } else {
+    
+    confirm('output file is not empty, continue? ', function(ok){
+     process.stdin.destroy();
+     render(program.input, program.output, context, callback);
+    });
+    
   }
 
-  // get the the json data file
-  if (data && data.length) {
-    if ( fs.existsSync(data) ){
-      context = JSON.parse( fs.readFileSync(data) );
-    } else {
-        console.warn('the data file doesn\'t exists');
-    }
-  }
-
-  var callback = function(err, response) {
-
-      if (err) { abort(err); }
-      console.log('the template was created at', output);
-      
-  };
-
-  fs.exists(output, function(exists){
-    if (!exists || force) {
-      render(input, output, context, callback);
-    } else {
-      confirm('output file is not empty, continue? ', function(ok){
-        if (ok) {
-          process.stdin.destroy();
-
-          render(input, output, context, callback);
-
-        } else {
-          abort('aborting');
-        }
-      });
-    }
-  });
-
-})(input, output, data, force);
-
-/**
- * Render the template without checks
- * 
- * @param {String} input
- * @param {String} output
- * @param {Object} context
- * @param {Function} fn
-  */
-function render(input, output, context, fn) {
-  
-  var template = fs.readFileSync(input, 'utf8');
-  //var writer = fs.createWriteStream(output);
-
-  /*
-  writer.on('error', function(err){
-    console.error(err);
-  });*/
-  
-  scriptme.render(template, context, fn);
-
-}
+});
 
 /**
  * Prompt confirmation with the given `msg`.
@@ -193,12 +103,27 @@ function prompt(msg, fn) {
 }
 
 /**
- * Exit with the given `str`.
- *
- * @param {String} str
- */
+ * Render the template without checks
+ * 
+ * @param {String} input
+ * @param {String} output
+ * @param {Object} context
+ * @param {Function} fn
+  */
+function render(input, output, context, fn) {
+  
+  var template = fs.readFileSync(input, 'utf8');
+  var writer = fs.createWriteStream(program.output);
 
-function abort(str) {
-  console.log.apply(null,arguments);
+  scriptme.render(template, writer, context, fn);
+}
+
+/**
+ * Exit with the given arguments.
+ *
+ */
+function abort() {
+  console.log.apply(null, arguments);
+  program.help();
   process.exit(1);
 }
